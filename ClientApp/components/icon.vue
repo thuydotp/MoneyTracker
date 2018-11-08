@@ -1,20 +1,34 @@
 <template>
     <div>
         <h1>Manage Icons</h1>
-        <div v-for="icon in iconList" :key="icon.id">
-            <span>{{icon.iconName}}</span>
-            <button @click="editIcon(icon)">Edit</button>
-            <button @click="deleteIcon(icon.id)">Delete</button>
-        </div>
-        <button @click="addNewIcon()">Add Icon</button>
+        <button type="button" class="btn btn-success" @click="addNewIcon()">Create</button>
         <div v-if="icon">
-            <div>
-                <label>Icon Name:</label>
-                <input v-model="icon.iconName"/>
+            <div class="form-group">
+              <label for="iconName">Icon Name</label>
+              <input type="text" class="form-control" id="iconName" placeholder="Insert icon name here..." v-model="icon.iconName">
             </div>
-            <button @click="save()">Save</button>
-            <button @click="cancel()">Cancel</button>
+            <button type="button" class="btn btn-info" @click="save()">Save</button>
+            <button type="button" class="btn btn-light" @click="cancel()">Cancel</button>
         </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Icon Name</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(icon, index) in iconList" :key="icon.id">
+              <th scope="row">{{index}}</th>
+              <td>{{icon.iconName}}</td>
+              <td>
+                <button type="button" class="btn btn-primary" @click="editIcon(icon)">Edit</button>
+                <button type="button" class="btn btn-danger" @click="deleteIcon(icon.id)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
     </div>
 </template>
 

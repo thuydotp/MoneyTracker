@@ -1,20 +1,34 @@
 <template>
     <div>
-        <h1>Spending Category</h1>
-        <div v-for="cate in listSpendingCategories" :key="cate.id">
-            <span>{{cate.categoryName}}</span>
-            <button @click="editCategory(cate)">Edit</button>
-            <button @click="deleteCategory(cate.id)">Delete</button>
-        </div>
-        <button @click="addNewCategory()">Add Category</button>
+        <h1>Manage Spending Category</h1>
+        <button type="button" class="btn btn-success" @click="addNewCategory()">Create</button>
         <div v-if="spendingCategory">
-            <div>
-                <label>Category Name:</label>
-                <input v-model="spendingCategory.categoryName"/>
+            <div class="form-group">
+              <label for="categoryName">Category Name</label>
+              <input type="text" class="form-control" id="categoryName" placeholder="Insert category name here..." v-model="spendingCategory.categoryName">
             </div>
-            <button @click="save()">Save</button>
-            <button @click="cancel()">Cancel</button>
+            <button type="button" class="btn btn-info" @click="save()">Save</button>
+            <button type="button" class="btn btn-light" @click="cancel()">Cancel</button>
         </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Category Name</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(cate, index) in listSpendingCategories" :key="cate.id">
+              <th scope="row">{{index}}</th>
+              <td>{{cate.categoryName}}</td>
+              <td>
+                <button type="button" class="btn btn-primary" @click="editCategory(cate)">Edit</button>
+                <button type="button" class="btn btn-danger" @click="deleteCategory(cate.id)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
     </div>
 </template>
 
