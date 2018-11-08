@@ -1,8 +1,8 @@
 <template>
     <div>
         <h1>Spending Category</h1>
-        <div v-for="(cate, index) in listSpendingCategories" :key="index">
-            <b>{{index}}</b><span>{{cate.categoryName}} ({{cate.id}})</span>
+        <div v-for="cate in listSpendingCategories" :key="cate.id">
+            <span>{{cate.categoryName}}</span>
             <button @click="editCategory(cate)">Edit</button>
             <button @click="deleteCategory(cate.id)">Delete</button>
         </div>
@@ -22,6 +22,7 @@
 export default {
   data() {
     return {
+      apiPath: `/api/category`,
       listSpendingCategories: null,
       spendingCategory: null,
       isEditMode: false
@@ -30,7 +31,7 @@ export default {
 
   methods: {
     async loadCategories() {
-      let response = await this.$http.get(`/api/category`);
+      let response = await this.$http.get(this.apiPath);
       this.listSpendingCategories = response.data;
     },
 
@@ -39,17 +40,14 @@ export default {
     },
 
     async createCategory() {
-      let response = await this.$http.post(
-        "/api/category",
-        this.spendingCategory
-      );
+      let response = await this.$http.post(this.apiPath, this.spendingCategory);
       this.loadCategories();
       this.spendingCategory = null;
       this.isEditMode = false;
     },
     async updateCategory() {
       let response = await this.$http.put(
-        `/api/category/${this.spendingCategory.id}`,
+        `${this.apiPath}/${this.spendingCategory.id}`,
         this.spendingCategory
       );
       this.loadCategories();
@@ -72,7 +70,7 @@ export default {
       this.spendingCategory = Object.assign({}, category);
     },
     async deleteCategory(id) {
-      let response = await this.$http.delete(`/api/category/${id}`);
+      let response = await this.$http.delete(`${this.apiPath}/${id}`);
       this.loadCategories();
     }
   },
@@ -82,6 +80,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>
