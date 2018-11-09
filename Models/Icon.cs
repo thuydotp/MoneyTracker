@@ -7,5 +7,7 @@ namespace MoneyTracker.Models
         public Guid ID { get; set; }
 
         public string IconName { get; set; }
+
+        public string IconKey { get; set; }
     }
 }

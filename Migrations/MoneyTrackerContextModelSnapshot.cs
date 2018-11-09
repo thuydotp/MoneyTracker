@@ -40,6 +40,10 @@ namespace MoneyTracker.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("IconKey")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
                     b.Property<string>("IconName")
                         .IsRequired()
                         .HasMaxLength(200);

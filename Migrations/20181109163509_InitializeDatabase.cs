@@ -37,7 +37,8 @@ namespace MoneyTracker.Migrations
                 columns: table => new
                 {
                     ID = table.Column<Guid>(nullable: false),
-                    IconName = table.Column<string>(maxLength: 200, nullable: false)
+                    IconName = table.Column<string>(maxLength: 200, nullable: false),
+                    IconKey = table.Column<string>(maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {

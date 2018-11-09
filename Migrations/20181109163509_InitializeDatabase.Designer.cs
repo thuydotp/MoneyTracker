@@ -10,7 +10,7 @@ using MoneyTracker.Persistence;
 namespace MoneyTracker.Migrations
 {
     [DbContext(typeof(MoneyTrackerContext))]
-    [Migration("20181101155948_Initialize Database")]
+    [Migration("20181109163509_InitializeDatabase")]
     partial class InitializeDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,10 @@ namespace MoneyTracker.Migrations
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("IconKey")
+                        .IsRequired()
+                        .HasMaxLength(200);
 
                     b.Property<string>("IconName")
                         .IsRequired()

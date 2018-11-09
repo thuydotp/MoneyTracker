@@ -4,16 +4,24 @@
         <button type="button" class="btn btn-success" @click="addNewIcon()">Create</button>
         <div v-if="icon">
             <div class="form-group">
-              <label for="iconName">Icon Name</label>
-              <input type="text" class="form-control" id="iconName" placeholder="Insert icon name here..." v-model="icon.iconName">
+              <label for="icon-name">Icon Name</label>
+              <input type="text" class="form-control" id="icon-name" placeholder="Insert icon name here..." v-model="icon.iconName">
             </div>
+            <div class="form-group">
+              <label for="baseline-icon-keys">Select Icon Key</label>
+              <select class="form-control" id="baseline-icon-keys" v-model="icon.iconKey">
+                <option v-for="iconKey in baselineIconKeys" :key="iconKey">{{iconKey}}</option>
+              </select>
+          </div>
             <button type="button" class="btn btn-info" @click="save()">Save</button>
             <button type="button" class="btn btn-light" @click="cancel()">Cancel</button>
         </div>
+        
         <table class="table">
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Icon</th>
               <th scope="col">Icon Name</th>
               <th scope="col">Action</th>
             </tr>
@@ -21,6 +29,9 @@
           <tbody>
             <tr v-for="(icon, index) in iconList" :key="icon.id">
               <th scope="row">{{index}}</th>
+              <th scope="row">
+                <!-- <icon icon="icon.iconKey" class="mr-2" /> -->
+                </th>
               <td>{{icon.iconName}}</td>
               <td>
                 <button type="button" class="btn btn-primary" @click="editIcon(icon)">Edit</button>
@@ -33,13 +44,16 @@
 </template>
 
 <script>
+
+import { IconLibrary } from '../store/api.js'
 export default {
   data() {
     return {
       apiPath: `/api/icon`,
       iconList: null,
       icon: null,
-      isEditMode: false
+      isEditMode: false,
+      baselineIconKeys: IconLibrary.iconKeys
     };
   },
 
@@ -91,6 +105,7 @@ export default {
 
   async created() {
     this.loadIcons();
+    console.log(this.baselineIconKeys);
   }
 };
 </script>
