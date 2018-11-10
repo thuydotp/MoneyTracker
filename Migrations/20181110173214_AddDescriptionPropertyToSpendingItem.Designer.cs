@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MoneyTracker.Persistence;
 
 namespace MoneyTracker.Migrations
 {
     [DbContext(typeof(MoneyTrackerContext))]
-    partial class MoneyTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20181110173214_AddDescriptionPropertyToSpendingItem")]
+    partial class AddDescriptionPropertyToSpendingItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

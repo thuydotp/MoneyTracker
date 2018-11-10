@@ -18,6 +18,10 @@ namespace MoneyTracker.Persistence.Mapping
 
             builder.Property(x => x.ChangeValue)
                 .IsRequired();
+
+            builder.Property(x => x.Description)
+                .HasMaxLength(250)
+                .IsRequired();
         }
     }
 }
