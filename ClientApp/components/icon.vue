@@ -49,7 +49,7 @@ import { IconLibrary } from '../store/api.js'
 export default {
   data() {
     return {
-      apiPath: `/api/icon`,
+      apiPath: `/api/Icon`,
       iconList: null,
       icon: null,
       isEditMode: false,

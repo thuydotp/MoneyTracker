@@ -36,7 +36,7 @@
 export default {
   data() {
     return {
-      apiPath: `/api/category`,
+      apiPath: `/api/Category`,
       listSpendingCategories: null,
       spendingCategory: null,
       isEditMode: false
