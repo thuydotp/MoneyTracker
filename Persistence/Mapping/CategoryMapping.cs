@@ -15,6 +15,10 @@ namespace MoneyTracker.Persistence.Mapping
             builder.Property(x => x.CategoryName)
                 .HasMaxLength(200)
                 .IsRequired();
+
+            builder.HasMany(x => x.SpendingItems)
+                .WithOne(x => x.Category)
+                .HasForeignKey(x => x.CategoryID);
         }
     }
 }

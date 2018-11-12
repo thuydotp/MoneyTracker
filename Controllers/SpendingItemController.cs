@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MoneyTracker.Models;
 using MoneyTracker.Persistence;
 
 namespace MoneyTracker.Controllers
@@ -21,9 +22,20 @@ namespace MoneyTracker.Controllers
 
         // GET: api/SpendingItem
         [HttpGet]
-        public IEnumerable<SpendingItemDA> GetSpendingItems()
+        public IEnumerable<SpendingItem> GetSpendingItems()
         {
-            return _context.SpendingItems;
+            var model =  _context.SpendingItems
+                .Include(x => x.Category).Select(x => new SpendingItem {
+                    ID = x.ID,
+                    ChangeValue = x.ChangeValue,
+                    Description = x.Description,
+                    CategoryID = x.CategoryID,
+                    CategoryName = x.Category.CategoryName,
+                    SpendingAccountID = x.SpendingAccountID,
+                    SpendingAccountName = x.SpendingAccount.AccountName,
+                    Type = (SpendingType)x.Type
+                }).ToList();
+            return model;
         }
 
         // GET: api/SpendingItem/5

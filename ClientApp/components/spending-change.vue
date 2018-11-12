@@ -40,7 +40,7 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Category Type</th>
+              <th scope="col">Spending Type</th>
               <th scope="col">ChangeValue</th>
               <th scope="col">Description</th>
               <th scope="col">Category</th>
@@ -51,11 +51,11 @@
           <tbody>
             <tr v-for="(spendingItem, index) in listSpendingItems" :key="spendingItem.id">
               <th scope="row">{{index}}</th>
-              <td>{{spendingItem.type}}</td>
+              <td>{{spendingItem.spendingTypeName}}</td>
               <td>{{spendingItem.changeValue}}</td>
               <td>{{spendingItem.description}}</td>
-              <td>{{getCategoryName(spendingItem.categoryID)}}</td>
-              <td>{{getAccountName(spendingItem.spendingAccountID)}}</td>
+              <td>{{spendingItem.categoryName}}</td>
+              <td>{{spendingItem.spendingAccountName}}</td>
               <td>
                 <button type="button" class="btn btn-primary" @click="editSpendingItem(spendingItem)">Edit</button>
                 <button type="button" class="btn btn-danger" @click="deleteSpendingItem(spendingItem.id)">Delete</button>
@@ -133,7 +133,7 @@ export default {
       let response = await this.$http.delete(`${this.apiPath}/${id}`);
       this.loadSpendingItems();
     },
-    //
+    //    
     
     async loadCategories() {
       let response = await this.$http.get(`/api/Category`);
@@ -142,12 +142,6 @@ export default {
     async loadAccounts() {
       let response = await this.$http.get(`/api/SpendingAccount`);
       this.listSpendingAccounts = response.data;
-    },
-    getCategoryName(cateID){
-      return this.listSpendingCategories.find(x => x.id === cateID).categoryName;
-    },
-    getAccountName(accountID){
-      return this.listSpendingAccounts.find(x => x.id === accountID).accountName;
     }
   },
 

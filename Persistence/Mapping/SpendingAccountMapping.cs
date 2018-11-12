@@ -15,6 +15,10 @@ namespace MoneyTracker.Persistence.Mapping
             builder.Property(x => x.AccountName)
                 .HasMaxLength(200)
                 .IsRequired();
+
+            builder.HasMany(x => x.SpendingItems)
+                .WithOne(x => x.SpendingAccount)
+                .HasForeignKey(x => x.SpendingAccountID);
         }
     }
 }

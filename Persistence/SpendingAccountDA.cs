@@ -9,6 +9,6 @@ namespace MoneyTracker.Persistence
 
         public string AccountName { get; set; }
 
-        List<SpendingItemDA> SpendingItems { get; set; }
+        public virtual List<SpendingItemDA> SpendingItems { get; set; }
     }
 }

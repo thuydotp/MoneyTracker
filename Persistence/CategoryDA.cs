@@ -10,6 +10,7 @@ namespace MoneyTracker.Persistence
         public string CategoryName { get; set; }
 
         public Guid IconID { get; set; }
-        List<SpendingItemDA> SpendingItems { get; set; }
+
+        public virtual List<SpendingItemDA> SpendingItems { get; set; }
     }
 }
