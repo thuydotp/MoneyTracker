@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h3>Transaction Summary</h3>
         <div class="spending-summary-chart">
             <div class="spending-by-category">
                 <label>Category 1:</label>

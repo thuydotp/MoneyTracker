@@ -45,7 +45,7 @@
 
 <script>
 
-import { IconLibrary } from '../store/api.js'
+import { IconLibrary } from '../../store/api.js'
 export default {
   data() {
     return {
