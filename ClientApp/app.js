@@ -5,9 +5,12 @@ import store from './store'
 import { sync } from 'vuex-router-sync'
 import App from 'components/app-root'
 import { FontAwesomeIcon } from './icons'
+import VueGoogleCharts from 'vue-google-charts'
 
 // Registration of global components
 Vue.component('icon', FontAwesomeIcon)
+
+Vue.use(VueGoogleCharts)
 
 Vue.prototype.$http = axios
 
