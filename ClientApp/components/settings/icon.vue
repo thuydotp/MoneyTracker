@@ -105,7 +105,6 @@ export default {
 
   async created() {
     this.loadIcons();
-    console.log(this.baselineIconKeys);
   }
 };
 </script>
