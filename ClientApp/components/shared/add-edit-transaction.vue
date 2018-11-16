@@ -31,7 +31,7 @@
         </select>
     </div>
     <button type="button" class="btn btn-info" @click="save()">Save</button>
-    <button type="button" class="btn btn-danger" v-if="isEdit" @click="deleteTransaction(spendingItem.id)">Delete</button>
+    <button type="button" class="btn btn-danger" v-if="isEdit" @click="deleteTransaction(transaction.id)">Delete</button>
     <button type="button" class="btn btn-light" @click="cancel()">Cancel</button>    
     
   </div> 
@@ -62,10 +62,10 @@ export default {
     }
   },
   methods: {
-    async createSpendingItem() {
+    async createTransaction() {
       let response = await this.$http.post(this.apiPath, this.transaction);
     },
-    async updateSpendingItem() {
+    async updateTransaction() {
       let response = await this.$http.put(
         `${this.apiPath}/${this.transaction.id}`,
         this.transaction
@@ -73,9 +73,9 @@ export default {
     },
     save() {
       if (this.isEdit) {
-        this.updateSpendingItem().then(() => this.closeTransaction());
+        this.updateTransaction().then(() => this.closeTransaction());
       } else {
-        this.createSpendingItem().then(() => this.closeTransaction());
+        this.createTransaction().then(() => this.closeTransaction());
       }
     },
     cancel() {

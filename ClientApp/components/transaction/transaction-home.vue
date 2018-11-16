@@ -1,13 +1,17 @@
 <template>
     <div>      
         <h1>Transaction Page</h1>
-        <transaction-summary v-if="showSummary" @create-transaction="createTransaction"></transaction-summary>
-        <transaction-list v-if="showSummary" :transactions="transactions" 
+        <modal v-if="showModal" @close="showModal = false">
+          <template slot="modal-body-slot">            
+            <add-edit-transaction :isEdit="isEditTransaction" :transaction="editedTransaction" 
+                                @close-transaction="closeTransaction()"></add-edit-transaction>
+          </template>
+        </modal>
+
+        <transaction-summary @create-transaction="createTransaction"></transaction-summary>
+        <transaction-list :transactions="transactions" 
                           @edit-transaction="editTransaction"
                           @delete-transaction="deleteTransaction"></transaction-list>
-        <add-edit-transaction v-if="editedTransaction" 
-                            :isEdit="isEditTransaction" :transaction="editedTransaction" 
-                            @close-transaction="closeTransaction()"></add-edit-transaction>
     </div>
 </template>
 
@@ -15,21 +19,23 @@
 import TransactionSummary from "./transaction-summary";
 import AddEditTransaction from "../shared/add-edit-transaction";
 import TransactionList from "../shared/transaction-list";
+import modal from "../shared/modal";
 
 export default {
   components: {
     "transaction-summary": TransactionSummary,
     "transaction-list": TransactionList,
-    "add-edit-transaction": AddEditTransaction
+    "add-edit-transaction": AddEditTransaction,
+    "modal": modal
   },
   data: function() {
-    return {      
+    return {
       apiPath: `/api/SpendingItem`,
-      showSummary: true,
       editedTransaction: null,
       isEditTransaction: false,
       transactionType: null,
-      transactions: []
+      transactions: [],
+      showModal: false
     };
   },
   methods: {
@@ -40,13 +46,14 @@ export default {
     createTransaction(transactionType) {
       this.isEditTransaction = false;
       this.editedTransaction = { type: transactionType };
-      this.showSummary = false;
+      // this.showSummary = false;
+      this.showModal = true;
     },
     editTransaction(transaction) {
       this.isEditTransaction = true;
       this.editedTransaction = Object.assign({}, transaction);
-      this.showSummary = false;
-    },    
+      this.showModal = true;
+    },
     async deleteTransaction(id) {
       let response = await this.$http.delete(`${this.apiPath}/${id}`);
       this.loadTransactions();
@@ -54,7 +61,7 @@ export default {
     closeTransaction() {
       this.loadTransactions();
       this.editedTransaction = null;
-      this.showSummary = true;
+      this.showModal = false;
     }
   },
   created() {
