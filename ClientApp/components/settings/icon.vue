@@ -30,8 +30,8 @@
             <tr v-for="(icon, index) in iconList" :key="icon.id">
               <th scope="row">{{index}}</th>
               <th scope="row">
-                <!-- <icon icon="icon.iconKey" class="mr-2" /> -->
-                </th>
+                <icon :icon="icon.iconKey" class="mr-2" />
+              </th>
               <td>{{icon.iconName}}</td>
               <td>
                 <button type="button" class="btn btn-primary" @click="editIcon(icon)">Edit</button>
