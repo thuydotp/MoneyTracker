@@ -1,17 +1,21 @@
 <template>
     <div>      
-        <h1>Transaction Page</h1>
+        <h1>Transaction Page</h1>       
+
+        <transaction-summary @create-transaction="createTransaction"></transaction-summary>
+        <div>
+          <b>Balance: </b><span>{{displayedBalance}}</span>
+        </div>
+        <transaction-list :transactions="transactions" 
+                          @edit-transaction="editTransaction"
+                          @delete-transaction="deleteTransaction"></transaction-list>
+
         <modal v-if="showModal" @close="showModal = false">
           <template slot="modal-body-slot">            
             <add-edit-transaction :isEdit="isEditTransaction" :transaction="editedTransaction" 
                                 @close-transaction="closeTransaction()"></add-edit-transaction>
           </template>
         </modal>
-
-        <transaction-summary @create-transaction="createTransaction"></transaction-summary>
-        <transaction-list :transactions="transactions" 
-                          @edit-transaction="editTransaction"
-                          @delete-transaction="deleteTransaction"></transaction-list>
     </div>
 </template>
 
@@ -26,7 +30,7 @@ export default {
     "transaction-summary": TransactionSummary,
     "transaction-list": TransactionList,
     "add-edit-transaction": AddEditTransaction,
-    "modal": modal
+    modal: modal
   },
   data: function() {
     return {
@@ -38,6 +42,26 @@ export default {
       showModal: false
     };
   },
+  computed: {
+    displayedBalance() {
+      let balance = 0;
+      balance = this.transactions
+        .map(x => {
+          let factor = 0;
+          if (x.type == 0) {
+            factor = -1;
+          }
+          if (x.type == 1) {
+            factor = 1;
+          }
+          return x.changeValue * factor;
+        })
+        .reduce((sum, value) => {
+          return (sum += value);
+        }, 0);
+      return balance;
+    }
+  },
   methods: {
     async loadTransactions() {
       let response = await this.$http.get(this.apiPath);
@@ -46,7 +70,6 @@ export default {
     createTransaction(transactionType) {
       this.isEditTransaction = false;
       this.editedTransaction = { type: transactionType };
-      // this.showSummary = false;
       this.showModal = true;
     },
     editTransaction(transaction) {
