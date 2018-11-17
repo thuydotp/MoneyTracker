@@ -1,12 +1,20 @@
 <template>
-    <div>      
-        <h1>Transaction Page</h1>       
-
-        <transaction-summary @create-transaction="createTransaction"></transaction-summary>
-        <div>
-          <b>Balance: </b><span>{{displayedBalance}}</span>
+    <div>
+      <div class="page-header">
+        <h1>Transaction Page</h1>      
+      </div>
+        <div class="filter-container">
+          <div>
+            <b>Acccount:</b>
+            <select v-model="selection.spendingAccountID">
+              <option value="null">All</option>
+                <option v-for="acc in listSpendingAccounts" :key="acc.id" :value="acc.id">{{acc.accountName}}</option>
+            </select>
+          </div>          
+          <button class="btn btn-info" @click="selection.showTransactionDetails = !selection.showTransactionDetails">{{selection.showTransactionDetails ? "Show Summary": "View Details"}}</button>
         </div>
-        <transaction-list :transactions="transactions" 
+        <transaction-summary v-if="!selection.showTransactionDetails" :transactions="transactions" @create-transaction="createTransaction"></transaction-summary>
+        <transaction-list v-if="selection.showTransactionDetails" :transactions="transactions" 
                           @edit-transaction="editTransaction"
                           @delete-transaction="deleteTransaction"></transaction-list>
 
@@ -30,7 +38,7 @@ export default {
     "transaction-summary": TransactionSummary,
     "transaction-list": TransactionList,
     "add-edit-transaction": AddEditTransaction,
-    modal: modal
+    "modal": modal
   },
   data: function() {
     return {
@@ -39,29 +47,14 @@ export default {
       isEditTransaction: false,
       transactionType: null,
       transactions: [],
-      showModal: false
+      showModal: false,
+      listSpendingAccounts: [],
+      selection: {
+        spendingAccountID: null,
+        showTransactionDetails: false
+      }
     };
-  },
-  computed: {
-    displayedBalance() {
-      let balance = 0;
-      balance = this.transactions
-        .map(x => {
-          let factor = 0;
-          if (x.type == 0) {
-            factor = -1;
-          }
-          if (x.type == 1) {
-            factor = 1;
-          }
-          return x.changeValue * factor;
-        })
-        .reduce((sum, value) => {
-          return (sum += value);
-        }, 0);
-      return balance;
-    }
-  },
+  },  
   methods: {
     async loadTransactions() {
       let response = await this.$http.get(this.apiPath);
@@ -85,10 +78,24 @@ export default {
       this.loadTransactions();
       this.editedTransaction = null;
       this.showModal = false;
+    },
+    async loadAccounts() {
+      let response = await this.$http.get(`/api/SpendingAccount`);
+      this.listSpendingAccounts = response.data;
     }
   },
   created() {
     this.loadTransactions();
+    this.loadAccounts();
   }
 };
 </script>
+
+<style>
+  .filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 50px;
+  }
+</style>
