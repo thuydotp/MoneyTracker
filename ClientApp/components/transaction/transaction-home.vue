@@ -1,29 +1,29 @@
 <template>
-    <div>
+    <div v-if="isLoaded">
       <div class="page-header">
         <h1>Transaction Page</h1>      
       </div>
-        <div class="filter-container">
-          <div>
-            <b>Acccount:</b>
-            <select v-model="selection.spendingAccountID">
-              <option value="null">All</option>
-                <option v-for="acc in listSpendingAccounts" :key="acc.id" :value="acc.id">{{acc.accountName}}</option>
-            </select>
-          </div>          
-          <button class="btn btn-info" @click="selection.showTransactionDetails = !selection.showTransactionDetails">{{selection.showTransactionDetails ? "Show Summary": "View Details"}}</button>
-        </div>
-        <transaction-summary v-if="!selection.showTransactionDetails" :transactions="transactions" @create-transaction="createTransaction"></transaction-summary>
-        <transaction-list v-if="selection.showTransactionDetails" :transactions="transactions" 
-                          @edit-transaction="editTransaction"
-                          @delete-transaction="deleteTransaction"></transaction-list>
+      <div class="filter-container">
+        <div>
+          <b>Acccount:</b>
+          <select v-model="selection.spendingAccountID">
+            <option value="null">All</option>
+              <option v-for="acc in listSpendingAccounts" :key="acc.id" :value="acc.id">{{acc.accountName}}</option>
+          </select>
+        </div>          
+        <button class="btn btn-info" @click="selection.showTransactionDetails = !selection.showTransactionDetails">{{selection.showTransactionDetails ? "Show Summary": "View Details"}}</button>
+      </div>        
+      <transaction-summary v-if="!selection.showTransactionDetails" :transactions="transactions" @create-transaction="createTransaction"></transaction-summary>
+      <transaction-list v-if="selection.showTransactionDetails" :transactions="transactions" 
+                        @edit-transaction="editTransaction"
+                        @delete-transaction="deleteTransaction"></transaction-list>        
 
-        <modal v-if="showModal" @close="showModal = false">
-          <template slot="modal-body-slot">            
-            <add-edit-transaction :isEdit="isEditTransaction" :transaction="editedTransaction" 
-                                @close-transaction="closeTransaction()"></add-edit-transaction>
-          </template>
-        </modal>
+      <modal v-if="showModal" @close="showModal = false">
+        <template slot="modal-body-slot">            
+          <add-edit-transaction :isEdit="isEditTransaction" :transaction="editedTransaction" 
+                              @close-transaction="closeTransaction()"></add-edit-transaction>
+        </template>
+      </modal>
     </div>
 </template>
 
@@ -38,11 +38,12 @@ export default {
     "transaction-summary": TransactionSummary,
     "transaction-list": TransactionList,
     "add-edit-transaction": AddEditTransaction,
-    "modal": modal
+    modal: modal
   },
   data: function() {
     return {
       apiPath: `/api/SpendingItem`,
+      isLoaded: false,
       editedTransaction: null,
       isEditTransaction: false,
       transactionType: null,
@@ -54,7 +55,7 @@ export default {
         showTransactionDetails: false
       }
     };
-  },  
+  },
   methods: {
     async loadTransactions() {
       let response = await this.$http.get(this.apiPath);
@@ -85,17 +86,18 @@ export default {
     }
   },
   created() {
-    this.loadTransactions();
-    this.loadAccounts();
+    Promise.all([this.loadTransactions(), this.loadAccounts()]).then(() => {
+      this.isLoaded = true;
+    });
   }
 };
 </script>
 
 <style>
-  .filter-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-right: 50px;
-  }
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 50px;
+}
 </style>

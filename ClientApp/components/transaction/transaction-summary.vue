@@ -23,23 +23,14 @@ export default {
   components: {
     "g-chart": GChart
   },
-  props: [
-    'transactions'
-  ],
+  props: ["transactions"],
   data: function() {
     return {
-      chartData: [
-        ["Task", "Hours per Day"],
-        ["Work", 11],
-        ["Eat", 2],
-        ["Commute", 2],
-        ["Watch TV", 2],
-        ["Sleep", 7]
-      ],
+      chartData: [],
       chartOptions: {
-        title: 'Transaction Summary',
+        title: "Transaction Summary",
         pieHole: 0.4,
-        legend: 'none'
+        legend: "none"
       }
     };
   },
@@ -57,33 +48,71 @@ export default {
       return balance;
     }
   },
+  watch: {
+    transactions: function (val) {
+      this.transactions = val;
+      this.populateChartData();
+    },
+  },
   methods: {
     createTransaction(transactionType) {
-        this.$emit('create-transaction', transactionType);
+      this.$emit("create-transaction", transactionType);
+    },
+    getExpenseGroupByCategory() {
+      let expenseCategories = [];
+      let expenseItems = this.transactions.filter(x => x.type == 0);
+
+      for (const key in expenseItems) {
+        if (expenseItems.hasOwnProperty(key)) {
+          const expense = expenseItems[key];
+          let currentvalue = 0;
+          let cateKey = expense.categoryName;
+          let expenseCategory = expenseCategories[cateKey];
+          currentvalue = expenseCategory ? expenseCategory.changeValue : 0;
+          expenseCategories[cateKey] = currentvalue + expense.changeValue;
+        }
+      }
+      return expenseCategories;
+    },
+    populateChartData() {
+      let chartData = [];
+      chartData.push(["Activity", "Dollar per period"]);
+
+      let expenseCategories = this.getExpenseGroupByCategory();
+      for (var categoryName in expenseCategories) {
+        if (expenseCategories.hasOwnProperty(categoryName)) {
+          let item = [categoryName, expenseCategories[categoryName]];
+          chartData.push(item);
+        }
+      }
+      this.chartData = chartData;
     }
+  },
+  async created() {
+    this.populateChartData();
   }
 };
 </script>
 
 <style scoped>
-  .transaction-summary-chart {
-    display: flex;
-    justify-content: space-between;
-    width: 50%;
-    margin: auto;
-    height: 400px;
-  }
+.transaction-summary-chart {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin: auto;
+  height: 400px;
+}
 
-  .balance-container{
-    text-align: center;
-    font-size: 30px;
-  }
-    
-  .create-new-transaction {
-    display: flex;
-    justify-content: space-between;
-    margin: auto;
-    width: 80%;
-    max-width: 400px;
-  }
+.balance-container {
+  text-align: center;
+  font-size: 30px;
+}
+
+.create-new-transaction {
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+  width: 80%;
+  max-width: 400px;
+}
 </style>
