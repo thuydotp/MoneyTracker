@@ -95,6 +95,8 @@ export default {
       let chartData = [];
       chartData.push(["Activity", "Dollar per period"]);
       this.expenseCategories = this.getExpenseGroupByCategory();
+      
+      this.categoryIDs = [];
       let rowIndex = 0;
       for (var key in this.expenseCategories) {
         if (this.expenseCategories.hasOwnProperty(key)) {
@@ -103,6 +105,11 @@ export default {
           this.categoryIDs[rowIndex] = key;
           rowIndex++;
         }
+      }
+
+      if(this.expenseCategories.length === 0){
+        chartData.push(["None", 100]);
+        this.categoryIDs[0] = null;
       }
       this.chartData = chartData;
     }

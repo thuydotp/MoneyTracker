@@ -7,14 +7,14 @@
         <div>
           <b>Acccount:</b>
           <select v-model="selection.spendingAccountID">
-            <option value="null">All</option>
+            <option :value="nullValue">All</option>
               <option v-for="acc in listSpendingAccounts" :key="acc.id" :value="acc.id">{{acc.accountName}}</option>
           </select>
         </div>          
         <button class="btn btn-info" @click="selection.showTransactionDetails = !selection.showTransactionDetails">{{selection.showTransactionDetails ? "Show Summary": "View Details"}}</button>
       </div>        
-      <transaction-summary v-if="!selection.showTransactionDetails" :transactions="transactions" @create-transaction="createTransaction"></transaction-summary>
-      <transaction-list v-if="selection.showTransactionDetails" :transactions="transactions" 
+      <transaction-summary v-if="!selection.showTransactionDetails" :transactions="filteredTransactions" @create-transaction="createTransaction"></transaction-summary>
+      <transaction-list v-if="selection.showTransactionDetails" :transactions="filteredTransactions" 
                         @edit-transaction="editTransaction"
                         @delete-transaction="deleteTransaction"></transaction-list>        
 
@@ -53,8 +53,15 @@ export default {
       selection: {
         spendingAccountID: null,
         showTransactionDetails: false
-      }
+      },
+      nullValue: null
     };
+  },
+  computed: {
+    filteredTransactions() {
+      let ignoreFilter = !this.selection.spendingAccountID;
+      return this.transactions.filter(x => ignoreFilter || x.spendingAccountID === this.selection.spendingAccountID);
+    }
   },
   methods: {
     async loadTransactions() {
@@ -63,7 +70,7 @@ export default {
     },
     createTransaction(transactionType) {
       this.isEditTransaction = false;
-      this.editedTransaction = { type: transactionType };
+      this.editedTransaction = { type: transactionType, spendingAccountID: this.selection.spendingAccountID };
       this.showModal = true;
     },
     editTransaction(transaction) {
