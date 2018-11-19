@@ -2,8 +2,10 @@
     <div>      
         <g-chart class="transaction-summary-chart"
           type="PieChart"
+          ref="gChart"
           :data="chartData"
           :options="chartOptions"
+          :events="chartEvents"
         />
         <div class="balance-container">          
             <span>Balance: </span><b>{{displayedBalance}}</b>
@@ -26,12 +28,30 @@ export default {
   props: ["transactions"],
   data: function() {
     return {
+      expenseCategories: [],
       chartData: [],
       chartOptions: {
         title: "Transaction Summary",
         pieHole: 0.4,
         legend: "none"
-      }
+      },
+      chartEvents: {
+        select: value => {
+          const table = this.$refs.gChart.chartObject;
+          var selection = table.getSelection();
+          for (var i = 0; i < selection.length; i++) {
+            var item = selection[i];
+            if(item) {
+              let categoryID = this.categoryIDs[item.row];
+              console.log("You just selected item: ", this.expenseCategories[categoryID]);
+            }
+          }
+        },
+        click: (targetID)=>{
+          console.log("click event", targetID);
+        }
+      },
+      categoryIDs: []
     };
   },
   computed: {
@@ -49,10 +69,10 @@ export default {
     }
   },
   watch: {
-    transactions: function (val) {
+    transactions: function(val) {
       this.transactions = val;
       this.populateChartData();
-    },
+    }
   },
   methods: {
     createTransaction(transactionType) {
@@ -60,16 +80,13 @@ export default {
     },
     getExpenseGroupByCategory() {
       let expenseCategories = [];
-      let expenseItems = this.transactions.filter(x => x.type == 0);
-
+      let expenseItems = this.transactions.filter(x => x.type == 0 && x.changeValue > 0);
       for (const key in expenseItems) {
         if (expenseItems.hasOwnProperty(key)) {
           const expense = expenseItems[key];
-          let currentvalue = 0;
-          let cateKey = expense.categoryName;
-          let expenseCategory = expenseCategories[cateKey];
-          currentvalue = expenseCategory ? expenseCategory.changeValue : 0;
-          expenseCategories[cateKey] = currentvalue + expense.changeValue;
+          let expenseCategory = expenseCategories[expense.id];
+          let value = (expenseCategory ? expenseCategory.changeValue : 0) + expense.changeValue;
+          expenseCategories[expense.id] = { categoryName: expense.categoryName, value: value };
         }
       }
       return expenseCategories;
@@ -77,12 +94,14 @@ export default {
     populateChartData() {
       let chartData = [];
       chartData.push(["Activity", "Dollar per period"]);
-
-      let expenseCategories = this.getExpenseGroupByCategory();
-      for (var categoryName in expenseCategories) {
-        if (expenseCategories.hasOwnProperty(categoryName)) {
-          let item = [categoryName, expenseCategories[categoryName]];
-          chartData.push(item);
+      this.expenseCategories = this.getExpenseGroupByCategory();
+      let rowIndex = 0;
+      for (var key in this.expenseCategories) {
+        if (this.expenseCategories.hasOwnProperty(key)) {
+          const expense = this.expenseCategories[key];
+          chartData.push([expense.categoryName, expense.value]);
+          this.categoryIDs[rowIndex] = key;
+          rowIndex++;
         }
       }
       this.chartData = chartData;
