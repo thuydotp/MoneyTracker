@@ -13,7 +13,7 @@ export default {
     <div>        
         <!-- MODAL -->    
         <div class="modal fade in show" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title"></h4>

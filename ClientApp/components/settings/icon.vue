@@ -44,8 +44,8 @@
 </template>
 
 <script>
+import { FixedIcons } from "../../icons.js";
 
-import { IconLibrary } from '../../store/api.js'
 export default {
   data() {
     return {
@@ -53,7 +53,7 @@ export default {
       iconList: null,
       icon: null,
       isEditMode: false,
-      baselineIconKeys: IconLibrary.iconKeys
+      baselineIconKeys: FixedIcons.getIconNames()
     };
   },
 
