@@ -10,7 +10,6 @@
                 <th scope="col">Note</th>
                 <th scope="col">Category</th>
                 <th scope="col">Spending Account</th>
-                <th scope="col">Date</th>
                 <th scope="col"></th>
                 </tr>
             </thead>
@@ -22,7 +21,6 @@
                 <td>{{trans.description}}</td>
                 <td>{{trans.categoryName}}</td>
                 <td>{{trans.spendingAccountName}}</td>
-                <td>{{trans.recordDate}}</td>
                 <td>
                     <button type="button" class="btn btn-primary" @click="$emit('edit-transaction',trans)">Edit</button>
                     <button type="button" class="btn btn-danger" @click="$emit('delete-transaction',trans.id)">Delete</button>

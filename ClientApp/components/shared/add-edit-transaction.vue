@@ -1,40 +1,48 @@
 <template>
-  <div v-if="transaction" class="spending-item-container">
-    <h4>{{transactionTitle}}</h4>
-    <div>
-        <label>Value Change:</label>
-        <input type="number" v-model="transaction.changeValue"/>
-    </div>
-    <div>
-        <label>Description:</label>
-        <textarea v-model="transaction.description"/>
-    </div>
-    <div>
-        <label>Transaction Type:</label>
-        <div>                    
-            <input type="radio" id="sxpense" value="0" v-model="transaction.type">
-            <label for="one">Expense</label>           
-            <input type="radio" id="income" value="1" v-model="transaction.type">
-            <label for="two">Income</label>
+    <div v-if="transaction" class="spending-item-container">
+        <h4>{{transactionTitle}}</h4>
+        <div>
+            <p v-if="errors.length">
+                <b>Please correct the following error(s):</b>
+                <ul>
+                    <li v-for="error in errors" :key="error">{{ error }}</li>
+                </ul>
+            </p>            
+            <div>
+                <label>Acccount:</label>
+                <select v-model="transaction.spendingAccountID">
+                    <option v-for="acc in listSpendingAccounts" :key="acc.id" :value="acc.id">{{acc.accountName}}</option>
+                </select>
+            </div>
+            <div>
+                <label>Value: </label>
+                <input type="number" v-model="transaction.changeValue" />
+            </div>
+            <div>
+                <label>Note: </label>
+                <textarea v-model="transaction.description" />
+                </div>
+            <div>
+                <label>Transaction Type:</label>
+                <div>                    
+                    <input type="radio" id="sxpense" value="0" v-model="transaction.type">
+                    <label for="one">Expense</label>           
+                    <input type="radio" id="income" value="1" v-model="transaction.type">
+                    <label for="two">Income</label>
+                </div>
+            </div>
+            <div>
+                <label>Category Type:</label>
+                <select v-model="transaction.categoryID">
+                    <option v-for="cate in selectableCategories" :key="cate.id" :value="cate.id">{{cate.categoryName}}</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-info" @click="save($event)">Save</button>
+            <button type="button" class="btn btn-danger" v-if="isEdit" @click="deleteTransaction(transaction.id)">Delete</button>
+            <button type="button" class="btn btn-light" @click="cancel()">Cancel</button>    
+      
         </div>
-    </div>
-    <div>
-        <label>Category Type:</label>
-        <select v-model="transaction.categoryID">
-            <option v-for="cate in listSpendingCategories" :key="cate.id" :value="cate.id">{{cate.categoryName}}</option>
-        </select>
-    </div>
-    <div>
-        <label>Acccount:</label>
-        <select v-model="transaction.spendingAccountID">
-            <option v-for="acc in listSpendingAccounts" :key="acc.id" :value="acc.id">{{acc.accountName}}</option>
-        </select>
-    </div>
-    <button type="button" class="btn btn-info" @click="save()">Save</button>
-    <button type="button" class="btn btn-danger" v-if="isEdit" @click="deleteTransaction(transaction.id)">Delete</button>
-    <button type="button" class="btn btn-light" @click="cancel()">Cancel</button>    
-    
-  </div> 
+    </div> 
 </template>
 
 <script>
@@ -44,14 +52,15 @@ export default {
     return {
       apiPath: `/api/SpendingItem`,
       listSpendingCategories: [],
-      listSpendingAccounts: []
+      listSpendingAccounts: [],
+      errors: []
     };
   },
   computed: {
     transactionTitle() {
-      return (this.isEdit ? "Edit " : "New ") + this.transactionTypeName;
+      return (this.isEdit ? "Edit " : "New ") + this.displayedTransactionType;
     },
-    transactionTypeName() {
+    displayedTransactionType() {
       if (this.transaction.type == 0) {
         return "Expense";
       }
@@ -59,6 +68,13 @@ export default {
         return "Income";
       }
       return "Transaction";
+    },
+    selectableCategories(){
+      let categories = this.listSpendingCategories || [];
+      if(this.transaction.type !== undefined && this.transaction.type !== null){
+        categories = categories.filter(x => x.type == this.transaction.type);
+      }
+      return categories;
     }
   },
   methods: {
@@ -71,7 +87,9 @@ export default {
         this.transaction
       );
     },
-    save() {
+    save(event) {
+      if(!this.validateForm(event)){ return;}
+
       if (this.isEdit) {
         this.updateTransaction().then(() => this.closeTransaction());
       } else {
@@ -95,6 +113,31 @@ export default {
     async loadAccounts() {
       let response = await this.$http.get(`/api/SpendingAccount`);
       this.listSpendingAccounts = response.data;
+    },
+    validateForm: function (e) {
+      this.errors = [];
+
+      if (!this.transaction.description) {
+        this.errors.push('Note required.');
+      }
+      if (!this.transaction.changeValue) {
+        this.errors.push('Change value required.');
+      }
+      if (!this.transaction.spendingAccountID) {
+        this.errors.push('Account required.');
+      }
+      if (this.transaction.type === null || this.transaction.type === undefined) {
+        this.errors.push('Transaction type required.');
+      }
+      if (!this.transaction.categoryID === null || this.transaction.categoryID === undefined) {
+        this.errors.push('Category required.');
+      }
+
+      if(this.errors.length > 0){
+        e.preventDefault();
+        return;
+      }
+      return true;
     }
   },
   async created() {

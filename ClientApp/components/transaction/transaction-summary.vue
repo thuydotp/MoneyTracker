@@ -43,12 +43,9 @@ export default {
             var item = selection[i];
             if(item) {
               let categoryID = this.categoryIDs[item.row];
-              console.log("You just selected item: ", this.expenseCategories[categoryID]);
+              console.info("You just selected item: ", this.expenseCategories[categoryID]);
             }
           }
-        },
-        click: (targetID)=>{
-          console.log("click event", targetID);
         }
       },
       categoryIDs: []

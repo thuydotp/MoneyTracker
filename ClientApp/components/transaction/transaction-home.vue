@@ -10,7 +10,11 @@
             <option :value="nullValue">All</option>
               <option v-for="acc in listSpendingAccounts" :key="acc.id" :value="acc.id">{{acc.accountName}}</option>
           </select>
-        </div>          
+        </div>
+        <div>
+          <b>Select Date: </b>
+          <input type="date" v-model="selection.selectedDate" />
+        </div>        
         <button class="btn btn-info" @click="selection.showTransactionDetails = !selection.showTransactionDetails">{{selection.showTransactionDetails ? "Show Summary": "View Details"}}</button>
       </div>        
       <transaction-summary v-if="!selection.showTransactionDetails" :transactions="filteredTransactions" @create-transaction="createTransaction"></transaction-summary>
@@ -52,7 +56,8 @@ export default {
       listSpendingAccounts: [],
       selection: {
         spendingAccountID: null,
-        showTransactionDetails: false
+        showTransactionDetails: false,
+        selectedDate: Date.now()
       },
       nullValue: null
     };
@@ -60,7 +65,11 @@ export default {
   computed: {
     filteredTransactions() {
       let ignoreFilter = !this.selection.spendingAccountID;
-      return this.transactions.filter(x => ignoreFilter || x.spendingAccountID === this.selection.spendingAccountID);
+      return this.transactions.filter(
+        x =>
+          this.sameDay(this.selection.selectedDate, x.recordDate) &&
+          (ignoreFilter || x.spendingAccountID === this.selection.spendingAccountID)
+      );
     }
   },
   methods: {
@@ -70,7 +79,10 @@ export default {
     },
     createTransaction(transactionType) {
       this.isEditTransaction = false;
-      this.editedTransaction = { type: transactionType, spendingAccountID: this.selection.spendingAccountID };
+      this.editedTransaction = {
+        type: transactionType,
+        spendingAccountID: this.selection.spendingAccountID
+      };
       this.showModal = true;
     },
     editTransaction(transaction) {
@@ -90,6 +102,15 @@ export default {
     async loadAccounts() {
       let response = await this.$http.get(`/api/SpendingAccount`);
       this.listSpendingAccounts = response.data;
+    },
+    sameDay(d1, d2) {
+      let date1 = new Date(d1);
+      let date2 = new Date(d2);
+      return (
+        date1.getUTCFullYear() === date2.getUTCFullYear() &&
+        date1.getUTCMonth() === date2.getUTCMonth() &&
+        date1.getUTCDate() === date2.getUTCDate()
+      );
     }
   },
   created() {

@@ -24,6 +24,7 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Category Name</th>
+              <th scope="col">Type</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -31,6 +32,7 @@
             <tr v-for="(cate, index) in listSpendingCategories" :key="cate.id">
               <th scope="row">{{index}}</th>
               <td>{{cate.categoryName}}</td>
+              <td>{{displayedCategoryType(cate)}}</td>
               <td>
                 <button type="button" class="btn btn-primary" @click="editCategory(cate)">Edit</button>
                 <button type="button" class="btn btn-danger" @click="deleteCategory(cate.id)">Delete</button>
@@ -51,7 +53,6 @@ export default {
       isEditMode: false
     };
   },
-
   methods: {
     async loadCategories() {
       let response = await this.$http.get(this.apiPath);
@@ -95,6 +96,16 @@ export default {
     async deleteCategory(id) {
       let response = await this.$http.delete(`${this.apiPath}/${id}`);
       this.loadCategories();
+    },
+    
+    displayedCategoryType(cate) {
+      if (cate.type == 0) {
+        return "Expense";
+      }
+      if (cate.type == 1) {
+        return "Income";
+      }
+      return "Transaction";
     }
   },
 
