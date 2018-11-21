@@ -7,6 +7,8 @@ namespace MoneyTracker.Persistence.Mapping
     {
         public void Configure(EntityTypeBuilder<IconDA> builder)
         {
+            builder.ToTable("Icons");
+            
             builder.HasKey(x => x.ID);
 
             builder.Property(x => x.ID)

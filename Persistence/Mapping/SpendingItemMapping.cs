@@ -7,6 +7,8 @@ namespace MoneyTracker.Persistence.Mapping
     {
         public void Configure(EntityTypeBuilder<SpendingItemDA> builder)
         {
+            builder.ToTable("Transactions");
+            
             builder.HasKey(x => x.ID);
 
             builder.Property(x => x.ID)
@@ -21,6 +23,11 @@ namespace MoneyTracker.Persistence.Mapping
 
             builder.Property(x => x.Description)
                 .HasMaxLength(250)
+                .IsRequired();
+
+            builder.Property(x => x.RecordDate)
+                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("getdate()")
                 .IsRequired();
         }
     }

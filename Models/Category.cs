@@ -12,7 +12,9 @@ namespace MoneyTracker.Models
         public string CategoryName { get; set; }
 
         public Guid IconID { get; set; }
-        
+
+        public SpendingType Type { get; set; }
+
         public virtual List<SpendingItem> SpendingItems { get; set; }
     }
 }

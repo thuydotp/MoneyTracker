@@ -11,6 +11,8 @@ namespace MoneyTracker.Persistence
 
         public Guid IconID { get; set; }
 
+        public SpendingTypeDA Type { get; set; }
+
         public virtual List<SpendingItemDA> SpendingItems { get; set; }
     }
 }

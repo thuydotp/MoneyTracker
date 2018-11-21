@@ -19,6 +19,8 @@ namespace MoneyTracker.Persistence
         public Guid SpendingAccountID { get; set; }
         
         public virtual SpendingAccountDA SpendingAccount { get; set; }
+        
+        public DateTime RecordDate { get; set; }
     }
 
     public enum SpendingTypeDA

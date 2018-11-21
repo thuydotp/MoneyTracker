@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MoneyTracker.Models
 {
@@ -34,6 +35,10 @@ namespace MoneyTracker.Models
         public Guid SpendingAccountID { get; set; }
 
         public string SpendingAccountName { get; set; }
+        
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString="{0:dd-MM-yyyy}", ApplyFormatInEditMode=true)]
+        public DateTime RecordDate { get; set; }
     }
 
     public enum SpendingType

@@ -33,7 +33,8 @@ namespace MoneyTracker.Controllers
                     CategoryName = x.Category.CategoryName,
                     SpendingAccountID = x.SpendingAccountID,
                     SpendingAccountName = x.SpendingAccount.AccountName,
-                    Type = (SpendingType)x.Type
+                    Type = (SpendingType)x.Type,
+                    RecordDate = x.RecordDate
                 }).ToList();
             return model;
         }

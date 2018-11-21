@@ -7,6 +7,7 @@ namespace MoneyTracker.Persistence.Mapping
     {
         public void Configure(EntityTypeBuilder<SpendingAccountDA> builder)
         {
+            builder.ToTable("SpendingAccounts");
             builder.HasKey(x => x.ID);
 
             builder.Property(x => x.ID)

@@ -7,6 +7,7 @@ namespace MoneyTracker.Persistence.Mapping
     {
         public void Configure(EntityTypeBuilder<CategoryDA> builder)
         {
+            builder.ToTable("Categories");
             builder.HasKey(x => x.ID);
 
             builder.Property(x => x.ID)
@@ -19,6 +20,10 @@ namespace MoneyTracker.Persistence.Mapping
             builder.HasMany(x => x.SpendingItems)
                 .WithOne(x => x.Category)
                 .HasForeignKey(x => x.CategoryID);
+                
+            builder.Property(x => x.Type)
+                .HasDefaultValue(SpendingTypeDA.Expense)
+                .IsRequired();
         }
     }
 }

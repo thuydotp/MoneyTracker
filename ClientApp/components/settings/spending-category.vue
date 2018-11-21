@@ -7,6 +7,15 @@
               <label for="categoryName">Category Name</label>
               <input type="text" class="form-control" id="categoryName" placeholder="Insert category name here..." v-model="spendingCategory.categoryName">
             </div>
+            <div>
+              <label>Category Type:</label>
+              <div>                    
+                  <input type="radio" id="sxpense" value="0" v-model="spendingCategory.type">
+                  <label for="one">Expense</label>           
+                  <input type="radio" id="income" value="1" v-model="spendingCategory.type">
+                  <label for="two">Income</label>
+              </div>
+          </div>
             <button type="button" class="btn btn-info" @click="save()">Save</button>
             <button type="button" class="btn btn-light" @click="cancel()">Cancel</button>
         </div>
