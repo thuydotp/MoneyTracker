@@ -28,7 +28,7 @@ namespace MoneyTracker.Controllers
 
         // GET: api/Icon/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetIconDA([FromRoute] Guid id)
+        public async Task<IActionResult> GetIcon([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -47,7 +47,7 @@ namespace MoneyTracker.Controllers
 
         // PUT: api/Icon/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutIconDA([FromRoute] Guid id, [FromBody] IconDA iconDA)
+        public async Task<IActionResult> PutIcon([FromRoute] Guid id, [FromBody] IconDA iconDA)
         {
             if (!ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace MoneyTracker.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!IconDAExists(id))
+                if (!IconExists(id))
                 {
                     return NotFound();
                 }
@@ -82,7 +82,7 @@ namespace MoneyTracker.Controllers
 
         // POST: api/Icon
         [HttpPost]
-        public async Task<IActionResult> PostIconDA([FromBody] IconDA iconDA)
+        public async Task<IActionResult> PostIcon([FromBody] IconDA iconDA)
         {
             if (!ModelState.IsValid)
             {
@@ -92,12 +92,12 @@ namespace MoneyTracker.Controllers
             _context.Icons.Add(iconDA);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetIconDA", new { id = iconDA.ID }, iconDA);
+            return CreatedAtAction("GetIcon", new { id = iconDA.ID }, iconDA);
         }
 
         // DELETE: api/Icon/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteIconDA([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteIcon([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -116,7 +116,7 @@ namespace MoneyTracker.Controllers
             return Ok(iconDA);
         }
 
-        private bool IconDAExists(Guid id)
+        private bool IconExists(Guid id)
         {
             return _context.Icons.Any(e => e.ID == id);
         }

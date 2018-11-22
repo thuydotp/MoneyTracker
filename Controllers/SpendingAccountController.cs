@@ -28,7 +28,7 @@ namespace MoneyTracker.Controllers
 
         // GET: api/SpendingAccount/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSpendingAccountDA([FromRoute] Guid id)
+        public async Task<IActionResult> GetSpendingAccount([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -47,7 +47,7 @@ namespace MoneyTracker.Controllers
 
         // PUT: api/SpendingAccount/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSpendingAccountDA([FromRoute] Guid id, [FromBody] SpendingAccountDA spendingAccountDA)
+        public async Task<IActionResult> PutSpendingAccount([FromRoute] Guid id, [FromBody] SpendingAccountDA spendingAccountDA)
         {
             if (!ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace MoneyTracker.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SpendingAccountDAExists(id))
+                if (!SpendingAccountExists(id))
                 {
                     return NotFound();
                 }
@@ -82,7 +82,7 @@ namespace MoneyTracker.Controllers
 
         // POST: api/SpendingAccount
         [HttpPost]
-        public async Task<IActionResult> PostSpendingAccountDA([FromBody] SpendingAccountDA spendingAccountDA)
+        public async Task<IActionResult> PostSpendingAccount([FromBody] SpendingAccountDA spendingAccountDA)
         {
             if (!ModelState.IsValid)
             {
@@ -92,12 +92,12 @@ namespace MoneyTracker.Controllers
             _context.Accounts.Add(spendingAccountDA);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSpendingAccountDA", new { id = spendingAccountDA.ID }, spendingAccountDA);
+            return CreatedAtAction("GetSpendingAccount", new { id = spendingAccountDA.ID }, spendingAccountDA);
         }
 
         // DELETE: api/SpendingAccount/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSpendingAccountDA([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteSpendingAccount([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
@@ -116,7 +116,7 @@ namespace MoneyTracker.Controllers
             return Ok(spendingAccountDA);
         }
 
-        private bool SpendingAccountDAExists(Guid id)
+        private bool SpendingAccountExists(Guid id)
         {
             return _context.Accounts.Any(e => e.ID == id);
         }

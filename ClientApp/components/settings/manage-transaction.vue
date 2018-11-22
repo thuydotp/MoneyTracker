@@ -22,7 +22,7 @@ export default {
   },
   data: function() {
     return {
-      apiPath: `/api/SpendingItem`,
+      apiPath: `/api/Transaction`,
       isEditTransaction: false,
       transactions: [],
       editedTransaction: null,

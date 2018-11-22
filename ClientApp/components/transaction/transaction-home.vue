@@ -46,7 +46,7 @@ export default {
   },
   data: function() {
     return {
-      apiPath: `/api/SpendingItem`,
+      apiPath: `/api/Transaction`,
       isLoaded: false,
       editedTransaction: null,
       isEditTransaction: false,

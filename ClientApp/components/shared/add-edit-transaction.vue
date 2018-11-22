@@ -50,7 +50,7 @@ export default {
   props: ["isEdit", "transaction"],
   data: function() {
     return {
-      apiPath: `/api/SpendingItem`,
+      apiPath: `/api/Transaction`,
       listSpendingCategories: [],
       listSpendingAccounts: [],
       errors: []

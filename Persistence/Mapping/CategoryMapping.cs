@@ -17,7 +17,7 @@ namespace MoneyTracker.Persistence.Mapping
                 .HasMaxLength(200)
                 .IsRequired();
 
-            builder.HasMany(x => x.SpendingItems)
+            builder.HasMany(x => x.Transactions)
                 .WithOne(x => x.Category)
                 .HasForeignKey(x => x.CategoryID);
                 

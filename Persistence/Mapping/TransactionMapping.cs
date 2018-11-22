@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MoneyTracker.Persistence.Mapping
 {
-    public class SpendingItemMapping : IEntityTypeConfiguration<SpendingItemDA>
+    public class TransactionMapping : IEntityTypeConfiguration<TransactionDA>
     {
-        public void Configure(EntityTypeBuilder<SpendingItemDA> builder)
+        public void Configure(EntityTypeBuilder<TransactionDA> builder)
         {
             builder.ToTable("Transactions");
             

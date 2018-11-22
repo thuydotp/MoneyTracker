@@ -15,6 +15,6 @@ namespace MoneyTracker.Models
 
         public SpendingType Type { get; set; }
 
-        public virtual List<SpendingItem> SpendingItems { get; set; }
+        public virtual List<Transaction> Transactions { get; set; }
     }
 }

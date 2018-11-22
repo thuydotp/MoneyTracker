@@ -13,6 +13,6 @@ namespace MoneyTracker.Persistence
 
         public SpendingTypeDA Type { get; set; }
 
-        public virtual List<SpendingItemDA> SpendingItems { get; set; }
+        public virtual List<TransactionDA> Transactions { get; set; }
     }
 }

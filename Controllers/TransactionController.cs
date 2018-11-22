@@ -11,21 +11,21 @@ namespace MoneyTracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SpendingItemController : ControllerBase
+    public class TransactionController : ControllerBase
     {
         private readonly MoneyTrackerContext _context;
 
-        public SpendingItemController(MoneyTrackerContext context)
+        public TransactionController(MoneyTrackerContext context)
         {
             _context = context;
         }
 
-        // GET: api/SpendingItem
+        // GET: api/Transaction
         [HttpGet]
-        public IEnumerable<SpendingItem> GetSpendingItems()
+        public IEnumerable<Transaction> GetTransactions()
         {
-            var model =  _context.SpendingItems
-                .Include(x => x.Category).Select(x => new SpendingItem {
+            var model =  _context.Transactions
+                .Include(x => x.Category).Select(x => new Transaction {
                     ID = x.ID,
                     ChangeValue = x.ChangeValue,
                     Description = x.Description,
@@ -39,40 +39,40 @@ namespace MoneyTracker.Controllers
             return model;
         }
 
-        // GET: api/SpendingItem/5
+        // GET: api/Transaction/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetSpendingItemDA([FromRoute] Guid id)
+        public async Task<IActionResult> GetTransaction([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var spendingItemDA = await _context.SpendingItems.FindAsync(id);
+            var transactionDA = await _context.Transactions.FindAsync(id);
 
-            if (spendingItemDA == null)
+            if (transactionDA == null)
             {
                 return NotFound();
             }
 
-            return Ok(spendingItemDA);
+            return Ok(transactionDA);
         }
 
-        // PUT: api/SpendingItem/5
+        // PUT: api/Transaction/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSpendingItemDA([FromRoute] Guid id, [FromBody] SpendingItemDA spendingItemDA)
+        public async Task<IActionResult> PutTransaction([FromRoute] Guid id, [FromBody] TransactionDA transactionDA)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != spendingItemDA.ID)
+            if (id != transactionDA.ID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(spendingItemDA).State = EntityState.Modified;
+            _context.Entry(transactionDA).State = EntityState.Modified;
 
             try
             {
@@ -80,7 +80,7 @@ namespace MoneyTracker.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SpendingItemDAExists(id))
+                if (!TransactionExists(id))
                 {
                     return NotFound();
                 }
@@ -93,45 +93,45 @@ namespace MoneyTracker.Controllers
             return NoContent();
         }
 
-        // POST: api/SpendingItem
+        // POST: api/Transaction
         [HttpPost]
-        public async Task<IActionResult> PostSpendingItemDA([FromBody] SpendingItemDA spendingItemDA)
+        public async Task<IActionResult> PostTransaction([FromBody] TransactionDA transactionDA)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.SpendingItems.Add(spendingItemDA);
+            _context.Transactions.Add(transactionDA);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetSpendingItemDA", new { id = spendingItemDA.ID }, spendingItemDA);
+            return CreatedAtAction("GetTransaction", new { id = transactionDA.ID }, transactionDA);
         }
 
-        // DELETE: api/SpendingItem/5
+        // DELETE: api/Transaction/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSpendingItemDA([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteTransaction([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var spendingItemDA = await _context.SpendingItems.FindAsync(id);
-            if (spendingItemDA == null)
+            var transactionDA = await _context.Transactions.FindAsync(id);
+            if (transactionDA == null)
             {
                 return NotFound();
             }
 
-            _context.SpendingItems.Remove(spendingItemDA);
+            _context.Transactions.Remove(transactionDA);
             await _context.SaveChangesAsync();
 
-            return Ok(spendingItemDA);
+            return Ok(transactionDA);
         }
 
-        private bool SpendingItemDAExists(Guid id)
+        private bool TransactionExists(Guid id)
         {
-            return _context.SpendingItems.Any(e => e.ID == id);
+            return _context.Transactions.Any(e => e.ID == id);
         }
     }
 }

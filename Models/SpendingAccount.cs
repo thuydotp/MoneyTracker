@@ -9,6 +9,6 @@ namespace MoneyTracker.Models
 
         public string AccountName { get; set; }
 
-        public virtual List<SpendingItem> SpendingItems { get; set; }
+        public virtual List<Transaction> Transactions { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MoneyTracker.Models
 {
-    public class SpendingItem
+    public class Transaction
     {
         public Guid ID { get; set; }
         

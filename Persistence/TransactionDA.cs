@@ -2,7 +2,7 @@
 
 namespace MoneyTracker.Persistence
 {
-    public class SpendingItemDA
+    public class TransactionDA
     {
         public Guid ID { get; set; }
 
