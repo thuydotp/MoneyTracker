@@ -57,19 +57,21 @@ export default {
       selection: {
         spendingAccountID: null,
         showTransactionDetails: false,
-        selectedDate: Date.now()
+        selectedDate: null
       },
       nullValue: null
     };
   },
   computed: {
     filteredTransactions() {
-      let ignoreFilter = !this.selection.spendingAccountID;
-      return this.transactions.filter(
-        x =>
-          this.sameDay(this.selection.selectedDate, x.recordDate) &&
-          (ignoreFilter || x.spendingAccountID === this.selection.spendingAccountID)
-      );
+      let transactions = this.transactions || [];
+      if (this.selection.spendingAccountID) {
+        transactions = transactions.filter( x => x.spendingAccountID === this.selection.spendingAccountID);
+      }
+      if(this.selection.selectedDate) { 
+        transactions = transactions.filter( x => this.sameDay(this.selection.selectedDate, x.recordDate));
+      }
+      return transactions;
     }
   },
   methods: {

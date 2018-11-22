@@ -4,22 +4,22 @@
         <manage-icon></manage-icon>
         <manage-spending-account></manage-spending-account>
         <manage-spending-category></manage-spending-category>
-        <manage-spending-change></manage-spending-change>
+        <manage-transaction></manage-transaction>
     </div>
 </template>
 
 <script>
-import Icon from "./icon";
-import SpendingAccount from "./spending-account";
-import SpendingCategory from "./spending-category";
-import SpendingChange from "./spending-change";
+import ManageIcon from "./manage-icon";
+import ManageSpendingAccount from "./manage-spending-account";
+import ManageSpendingCategory from "./manage-spending-category";
+import ManageTransaction from "./manage-transaction";
 
 export default {
   components: {
-    "manage-icon": Icon,
-    "manage-spending-account": SpendingAccount,
-    "manage-spending-category": SpendingCategory,
-    "manage-spending-change": SpendingChange,
+    "manage-icon": ManageIcon,
+    "manage-spending-account": ManageSpendingAccount,
+    "manage-spending-category": ManageSpendingCategory,
+    "manage-transaction": ManageTransaction,
   },
   data: function(){
     return {
