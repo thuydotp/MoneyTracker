@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { TransactionService } from '../../store/api.js'
 import TransactionSummary from "./transaction-summary";
 import AddEditTransaction from "../shared/add-edit-transaction";
 import TransactionList from "../shared/transaction-list";
@@ -76,8 +77,7 @@ export default {
   },
   methods: {
     async loadTransactions() {
-      let response = await this.$http.get(this.apiPath);
-      this.transactions = response.data;
+      TransactionService.loadTransactions().then((data) => this.transactions = data);
     },
     createTransaction(transactionType) {
       this.isEditTransaction = false;
@@ -102,8 +102,7 @@ export default {
       this.showModal = false;
     },
     async loadAccounts() {
-      let response = await this.$http.get(`/api/SpendingAccount`);
-      this.listSpendingAccounts = response.data;
+      TransactionService.loadAccounts().then((data) => this.listSpendingAccounts = data);
     },
     sameDay(d1, d2) {
       let date1 = new Date(d1);

@@ -44,6 +44,8 @@
 </template>
 
 <script>
+import { TransactionService } from '../../store/api.js'
+
 export default {
   data() {
     return {
@@ -99,13 +101,7 @@ export default {
     },
     
     displayedCategoryType(cate) {
-      if (cate.type == 0) {
-        return "Expense";
-      }
-      if (cate.type == 1) {
-        return "Income";
-      }
-      return "Transaction";
+      return TransactionService.getDisplayedType(cate.type);
     }
   },
 

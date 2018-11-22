@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import { TransactionService } from '../../store/api.js'
+
 export default {
   props: ["isEdit", "transaction"],
   data: function() {
@@ -61,13 +63,7 @@ export default {
       return (this.isEdit ? "Edit " : "New ") + this.displayedTransactionType;
     },
     displayedTransactionType() {
-      if (this.transaction.type == 0) {
-        return "Expense";
-      }
-      if (this.transaction.type == 1) {
-        return "Income";
-      }
-      return "Transaction";
+      return TransactionService.getDisplayedType(this.transaction.type);
     },
     selectableCategories(){
       let categories = this.listSpendingCategories || [];
@@ -106,14 +102,6 @@ export default {
     closeTransaction() {
       this.$emit("close-transaction");
     },
-    async loadCategories() {
-      let response = await this.$http.get(`/api/Category`);
-      this.listSpendingCategories = response.data;
-    },
-    async loadAccounts() {
-      let response = await this.$http.get(`/api/SpendingAccount`);
-      this.listSpendingAccounts = response.data;
-    },
     validateForm: function (e) {
       this.errors = [];
 
@@ -141,8 +129,8 @@ export default {
     }
   },
   async created() {
-    this.loadCategories();
-    this.loadAccounts();
+    TransactionService.loadCategories().then((data) => this.listSpendingCategories = data);
+    TransactionService.loadAccounts().then((data) => this.listSpendingAccounts = data);
   }
 };
 </script>
